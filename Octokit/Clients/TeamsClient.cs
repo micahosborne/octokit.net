@@ -80,7 +80,18 @@ namespace Octokit
             var endpoint = ApiUrls.OrganizationTeams(org);
             return ApiConnection.Post<Team>(endpoint, team);
         }
+        /// <summary>
+        /// Adds a member to the <see cref="Team" /> for the current org.
+        /// </summary>
+        /// <exception cref="ApiException">Thrown when a general API error occurs.</exception>
+        /// <returns>Newly created <see cref="Team"/></returns>
+        public Task AddMember(int id, string login)
+        {
+            Ensure.ArgumentNotNullOrEmptyString(login, "login");
 
+            var endpoint = ApiUrls.TeamMember(id, login);
+            return ApiConnection.Put(endpoint);
+        }
         /// <summary>
         /// Returns updated <see cref="Team" /> for the current org.
         /// </summary>
@@ -102,6 +113,17 @@ namespace Octokit
         public Task Delete(int id)
         {
             var endpoint = ApiUrls.Teams(id);
+            return ApiConnection.Delete(endpoint);
+        }
+
+        /// <summary>
+        /// Deletes a member - must have owner permissions to this
+        /// </summary>
+        /// <exception cref="ApiException">Thrown when a general API error occurs.</exception>
+        /// <returns></returns>
+        public Task DeleteMember(int id, string login)
+        {
+            var endpoint = ApiUrls.TeamMember(id,login);
             return ApiConnection.Delete(endpoint);
         }
 
